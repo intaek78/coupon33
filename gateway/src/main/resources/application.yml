@@ -1,0 +1,78 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: member
+          uri: http://localhost:8081
+          predicates:
+            - Path=/members/** 
+        - id: coupon
+          uri: http://localhost:8082
+          predicates:
+            - Path=/coupons/**
+        - id: mypage
+          uri: http://localhost:8085
+          predicates:
+            - Path= /mypages/**
+        - id: Notification
+          uri: http://localhost:8084
+          predicates:
+            - Path=/notifications/**
+        - id: cancellation
+          uri: http://localhost:8086
+          predicates:
+            - Path=/cancellations/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: member
+          uri: http://member:8080
+          predicates:
+            - Path=/members/** 
+        - id: coupon
+          uri: http://coupon:8080
+          predicates:
+            - Path=/coupons/**,/cancellations/**
+        - id: mypage
+          uri: http://mypage:8080
+          predicates:
+            - Path= /mypages/**
+        - id: Notification
+          uri: http://Notification:8080
+          predicates:
+            - Path=/notifications/** 
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
